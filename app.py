@@ -27,7 +27,7 @@ class Visualizer(Static):
         self.set_interval(0.15, self.tick)
 
     def tick(self) -> None:
-        app: "MusicPlayerApp" = self.app  # type: ignore[assignment]
+        app: "Ashara" = self.app  # type: ignore[assignment]
         if app.player.paused or app.player.current_track is None:
             self.bars = [1] * 24
         else:
@@ -38,7 +38,7 @@ class Visualizer(Static):
         return "".join(levels[min(b, 8)] for b in self.bars)
 
 
-class MusicPlayerApp(App):
+class Ashara(App):
     CSS = """
     Screen {
         background: #10121a;
@@ -175,7 +175,7 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: python main.py <music-directory>")
         sys.exit(1)
-    app = MusicPlayerApp(sys.argv[1])
+    app = Ashara(sys.argv[1])
     app.run()
 
 

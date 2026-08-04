@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      # libmpv is a system library that python-mpv binds to via ctypes.
+      # It won't come from pip, so it has to be installed at the OS level
+      # for `import mpv` (and therefore the app) to work at all.
+      - name: Install libmpv
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libmpv2
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Compile check
+        run: python -m py_compile main.py app.py player.py scanner.py
+
+      - name: Import check
+        run: python -c "import scanner, player, app; print('imports OK')"
